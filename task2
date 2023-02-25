@@ -1,0 +1,24 @@
+#Direct IP connection
+ifconfig -a
+sudo ifconfig enp0s3 213.232.244.24 netmask 255.255.255.0 up
+#conection via NAT
+ip a
+sudo nano /etc/netplan/00-installer -config.yaml
+sudo netplan apply 
+reboot
+#Connection via a proxy server
+sudo apt-get update
+sudo apt-get install nginx
+#proxy configuration in the file
+sudo service nginx restart
+#proxy configuration setting
+server {
+    listen 80;
+    server_name example.com;
+
+    location / {
+        proxy_pass http://localhost:8080;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+}
